@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-//import Feedback from './components/Feedback';
+import FeedbackOptions from './components/FeedbackOptions/FeedbackOptions';
+import Statistics from './components/Statistics/Statistics';
+import Notification from './components/Notification/Notification';
 
 export default class App extends Component {
   state = {
@@ -20,31 +22,20 @@ export default class App extends Component {
 
     if (allValues.some(value => value !== 0)) {
       return (
-        <ul>
-          <li>
-            Good:<span>{this.state.good}</span>
-          </li>
-          <li>
-            Neutral:<span>{this.state.neutral}</span>
-          </li>
-          <li>
-            Bad:<span>{this.state.bad}</span>
-          </li>
-          <li>
-            Total:<span>{this.countTotalFeedback()}</span>
-          </li>
-          <li>
-            Positive Feedback:
-            <span>{this.countPositiveFeedbackPercentage()}%</span>
-          </li>
-        </ul>
+        <Statistics
+          good={this.state.good}
+          neutral={this.state.neutral}
+          bad={this.state.bad}
+          total={this.countTotalFeedback()}
+          positivePercentage={this.countPositiveFeedbackPercentage()}
+        ></Statistics>
       );
     } else {
-      return <h3>No feedback given</h3>;
+      return <Notification message="No feedback given" />;
     }
   };
 
-  handleClick = ({ target }) => {
+  onLeaveFeedback = ({ target }) => {
     this.setState(prevState => ({
       [target.textContent.toLowerCase()]:
         prevState[target.textContent.toLowerCase()] + 1,
@@ -55,24 +46,10 @@ export default class App extends Component {
     return (
       <div className="container">
         <h2>Pleas leave feedback</h2>
-
-        <ul>
-          <li>
-            <button value={this.state[0]} onClick={this.handleClick}>
-              Good
-            </button>
-          </li>
-          <li>
-            <button value={this.state.neutral} onClick={this.handleClick}>
-              Neutral
-            </button>
-          </li>
-          <li>
-            <button value={this.state.bad} onClick={this.handleClick}>
-              Bad
-            </button>
-          </li>
-        </ul>
+        <FeedbackOptions
+          options={this.state}
+          onLeaveFeedback={this.onLeaveFeedback}
+        />
 
         <h2>Statistics</h2>
         {this.isEmpty(this.state)}
