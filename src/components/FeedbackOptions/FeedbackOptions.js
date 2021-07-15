@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function FeedbackOptions({ options, onLeaveFeedback }) {
   const keysBtns = Object.keys(options);
@@ -23,3 +24,8 @@ export default function FeedbackOptions({ options, onLeaveFeedback }) {
     </ul>
   );
 }
+
+FeedbackOptions.propTypes = {
+  onLeaveFeedback: PropTypes.func.isRequired,
+  options: PropTypes.objectOf(PropTypes.number),
+};
